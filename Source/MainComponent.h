@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 
 #include "Sysex/Digitone/Kit.h"
+#include "Device/Digitone.h"
 
 //==============================================================================
 /*
@@ -40,6 +41,7 @@ private:
     void getKit();
     
     std::unique_ptr<Kompanion::Sysex::Digitone::Kit> kit;
+    Kompanion::Device::Digitone device;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

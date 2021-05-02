@@ -4,6 +4,14 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="Q6CY3a" name="Kompanion">
     <GROUP id="{26973403-33BC-8D60-13ED-0543D2CFFDB0}" name="Source">
+      <GROUP id="{474C4658-1633-F758-D705-FC2F41B469EC}" name="Device">
+        <FILE id="VJUBgf" name="Device.cpp" compile="1" resource="0" file="Source/Device/Device.cpp"/>
+        <FILE id="eqqKj7" name="Device.h" compile="0" resource="0" file="Source/Device/Device.h"/>
+        <FILE id="qusJ12" name="DigiBase.cpp" compile="1" resource="0" file="Source/Device/DigiBase.cpp"/>
+        <FILE id="s8f1Ar" name="DigiBase.h" compile="0" resource="0" file="Source/Device/DigiBase.h"/>
+        <FILE id="L8SsgG" name="Digitone.cpp" compile="1" resource="0" file="Source/Device/Digitone.cpp"/>
+        <FILE id="iNTj0e" name="Digitone.h" compile="0" resource="0" file="Source/Device/Digitone.h"/>
+      </GROUP>
       <GROUP id="{6BE3F451-8584-7009-BCD9-37FD8DD31D70}" name="Sysex">
         <GROUP id="{23AE875D-DA4E-B193-4DEF-3686AE2C7476}" name="Digitone">
           <FILE id="cEtgcx" name="Kit.cpp" compile="1" resource="0" file="Source/Sysex/Digitone/Kit.cpp"/>

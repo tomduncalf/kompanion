@@ -17,6 +17,7 @@ Sysex::Sysex (juce::MemoryBlock message) : message (message) {}
 juce::MidiMessage Sysex::getMessage()
 {
     injectChecksum();
+    
     return juce::MidiMessage::createSysExMessage (message.getData(), (int) message.getSize());
 }
 
@@ -30,7 +31,6 @@ void Sysex::injectChecksum()
     // JUCE doesn't include f0/f7 in the message so we -8 instead
     auto messageSize = message.getSize() - 8;
     
-    //Number(( & 16256) >> 7).toString(16)
     int messageLengthByte1 = (messageSize & 0b11111110000000) >> 7; // bits 7-13
     int messageLengthByte2 = (messageSize & 0b1111111); // bits 0-6
 
