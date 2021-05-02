@@ -2,6 +2,8 @@
 
 #include <JuceHeader.h>
 
+#include "Sysex/Digitone/Kit.h"
+
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
@@ -36,9 +38,8 @@ private:
                                     const juce::MidiMessage& message) override;
     
     void getKit();
-    void injectMidiControls (juce::MemoryBlock& kitDump);
-    void injectChecksum (juce::MemoryBlock& message);
-    void injectTargetKit (juce::MemoryBlock& message, int targetKit);
+    
+    std::unique_ptr<Kompanion::Sysex::Digitone::Kit> kit;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

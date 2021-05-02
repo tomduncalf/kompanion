@@ -20,11 +20,11 @@ MainComponent::MainComponent()
         setAudioChannels (2, 2);
     }
     
-    auto syxFile = juce::File ("/Users/td/git/audio/elektron/SendKitTester/digitone_kit1_as2.syx");
-    jassert (syxFile.existsAsFile());
-    
-    juce::MemoryBlock bytes;
-    jassert (syxFile.loadFileAsData (bytes));
+//    auto syxFile = juce::File ("/Users/td/git/audio/elektron/SendKitTester/digitone_kit1_as2.syx");
+//    jassert (syxFile.existsAsFile());
+//    
+//    juce::MemoryBlock bytes;
+//    jassert (syxFile.loadFileAsData (bytes));
 
     auto inDevices = juce::MidiInput::getAvailableDevices();
     input = juce::MidiInput::openDevice (inDevices[1].identifier, this);
@@ -100,13 +100,12 @@ void MainComponent::handleIncomingMidiMessage (juce::MidiInput* source,
     {
         auto memoryBlock = juce::MemoryBlock (message.getSysExData(), message.getSysExDataSize());
         
-        injectMidiControls (memoryBlock);
-        injectTargetKit (memoryBlock, 1);
-        injectChecksum (memoryBlock);
-
-        syxMessage = juce::MidiMessage::createSysExMessage(memoryBlock.getData(), (int) memoryBlock.getSize());
-        output->sendMessageNow (syxMessage);
+        kit = std::make_unique<Kompanion::Sysex::Digitone::Kit> (memoryBlock);
         
+        kit->injectMidiControls();
+        kit->setTargetKit (1);
+
+        output->sendMessageNow (kit->getMessage());
     }
     else if (message.isProgramChange())
     {
@@ -120,55 +119,4 @@ void MainComponent::getKit()
     uint8_t request[13] = {0x00, 0x20, 0x3c, 0x0d, 0x00, 0x62, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x05};
     
     output->sendMessageNow (juce::MidiMessage::createSysExMessage (request, 13));
-}
-
-void MainComponent::injectMidiControls (juce::MemoryBlock& kitDump)
-{
-    // This sets MIDI T4 to output CC on channel 1
-//    kitDump.setBitRange (0x913 * 8, 4 * 8, 0x20007f01);
-    int start = 2321;
-    kitDump.setBitRange (start * 8, 8, 0x20);
-    kitDump.setBitRange ((start + 1) * 8, 8, 0x00);
-    kitDump.setBitRange ((start + 2) * 8, 8, 0x7f);
-    kitDump.setBitRange ((start + 3) * 8, 8, 0x01);
-}
-
-void MainComponent::injectChecksum (juce::MemoryBlock& message)
-{
-    int startByte = 9;
-    int checksumBytes = 5;
-    int total = 0;
-    
-    // Length is bytes 7 up to the end minus last 3 = size - 10
-    // JUCE doesn't include f0/f7 in the message so we -8 instead
-    auto messageSize = message.getSize() - 8;
-    
-    //Number(( & 16256) >> 7).toString(16)
-    int messageLengthByte1 = (messageSize & 0b11111110000000) >> 7; // bits 7-13
-    int messageLengthByte2 = (messageSize & 0b1111111); // bits 0-6
-
-    int currentByte = -1;
-    for (auto byte : message)
-    {
-        currentByte++;
-        
-        if (currentByte < startByte) continue;
-        if (currentByte > message.getSize() - checksumBytes) continue;
-        
-        total += byte;
-    }
-    
-    auto checksumByte1 = (total & 0b11111110000000) >> 7; // bits 7-13
-    auto checksumByte2 = (total & 0b1111111); // bits 0-6
-    
-    size_t start = message.getSize() - 4;
-    message.setBitRange (start * 8, 8, checksumByte1);
-    message.setBitRange ((start + 1) * 8, 8, checksumByte2);
-    message.setBitRange ((start + 2) * 8, 8, messageLengthByte1);
-    message.setBitRange ((start + 3) * 8, 8, messageLengthByte2);
-}
-
-void MainComponent::injectTargetKit (juce::MemoryBlock& message, int targetKit)
-{
-    message.setBitRange (8 * 8, 8, targetKit);
 }

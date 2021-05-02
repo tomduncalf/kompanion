@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="e7pA75" name="SendKitTester" projectType="guiapp" useAppConfig="0"
+<JUCERPROJECT id="e7pA75" name="Kompanion" projectType="guiapp" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
-  <MAINGROUP id="Q6CY3a" name="SendKitTester">
+  <MAINGROUP id="Q6CY3a" name="Kompanion">
     <GROUP id="{26973403-33BC-8D60-13ED-0543D2CFFDB0}" name="Source">
+      <GROUP id="{6BE3F451-8584-7009-BCD9-37FD8DD31D70}" name="Sysex">
+        <GROUP id="{23AE875D-DA4E-B193-4DEF-3686AE2C7476}" name="Digitone">
+          <FILE id="cEtgcx" name="Kit.cpp" compile="1" resource="0" file="Source/Sysex/Digitone/Kit.cpp"/>
+          <FILE id="gA8lxO" name="Kit.h" compile="0" resource="0" file="Source/Sysex/Digitone/Kit.h"/>
+        </GROUP>
+        <FILE id="vIyiCl" name="Sysex.cpp" compile="1" resource="0" file="Source/Sysex/Sysex.cpp"/>
+        <FILE id="MssqJD" name="Sysex.h" compile="0" resource="0" file="Source/Sysex/Sysex.h"/>
+      </GROUP>
       <FILE id="QFy1kz" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="itvHPo" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="n0ugMJ" name="MainComponent.cpp" compile="1" resource="0"
