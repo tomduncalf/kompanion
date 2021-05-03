@@ -10,41 +10,43 @@
 
 #include "Device.h"
 
-namespace Kompanion { namespace Device {
-
-Device::Device (juce::String defaultMidiDeviceName) : defaultMidiDeviceName (defaultMidiDeviceName)
+namespace Kompanion
 {
-    initialiseDefaultMidiDevices();
-}
-
-void Device::initialiseDefaultMidiDevices()
+namespace Device
 {
-    juce::MidiDeviceInfo inputInfo;
-    
-    for (auto& info : juce::MidiInput::getAvailableDevices())
+    Device::Device (juce::String defaultMidiDeviceName) : defaultMidiDeviceName (defaultMidiDeviceName)
     {
-        if (info.name == defaultMidiDeviceName)
-            inputInfo = info;
+        initialiseDefaultMidiDevices();
     }
-    jassert (inputInfo.identifier != "");
-    
-    midiInput = juce::MidiInput::openDevice (inputInfo.identifier, this);
-    jassert (midiInput != nullptr);
-    
-    juce::MidiDeviceInfo outputInfo;
-    
-    for (auto& info : juce::MidiOutput::getAvailableDevices())
+
+    void Device::initialiseDefaultMidiDevices()
     {
-        if (info.name == defaultMidiDeviceName)
-            outputInfo = info;
+        juce::MidiDeviceInfo inputInfo;
+
+        for (auto& info : juce::MidiInput::getAvailableDevices())
+        {
+            if (info.name == defaultMidiDeviceName)
+                inputInfo = info;
+        }
+        jassert (inputInfo.identifier != "");
+
+        midiInput = juce::MidiInput::openDevice (inputInfo.identifier, this);
+        jassert (midiInput != nullptr);
+
+        juce::MidiDeviceInfo outputInfo;
+
+        for (auto& info : juce::MidiOutput::getAvailableDevices())
+        {
+            if (info.name == defaultMidiDeviceName)
+                outputInfo = info;
+        }
+        jassert (outputInfo.identifier != "");
+
+        midiOutput = juce::MidiOutput::openDevice (outputInfo.identifier);
+        jassert (midiOutput != nullptr);
+
+        midiInput->start();
     }
-    jassert (outputInfo.identifier != "");
-    
-    midiOutput = juce::MidiOutput::openDevice (outputInfo.identifier);
-    jassert (midiOutput != nullptr);
 
-    midiInput->start();
-
-}
-
-} }
+} // namespace Device
+} // namespace Kompanion

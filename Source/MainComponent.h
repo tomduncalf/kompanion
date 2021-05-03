@@ -2,16 +2,16 @@
 
 #include <JuceHeader.h>
 
-#include "Sysex/Digitone/Kit.h"
 #include "Device/Digitone.h"
+#include "Sysex/Digitone/Kit.h"
 
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainComponent  : public juce::AudioAppComponent,
-                       public juce::MidiInputCallback
+class MainComponent : public juce::AudioAppComponent,
+                      public juce::MidiInputCallback
 {
 public:
     //==============================================================================
@@ -37,11 +37,11 @@ private:
 
     void handleIncomingMidiMessage (juce::MidiInput* source,
                                     const juce::MidiMessage& message) override;
-    
+
     void getKit();
-    
+
     std::unique_ptr<Kompanion::Sysex::Digitone::Kit> kit;
     Kompanion::Device::Digitone device;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

@@ -12,24 +12,27 @@
 
 #include <JuceHeader.h>
 
-namespace Kompanion { namespace Device {
-
-class Device : public juce::MidiInputCallback
+namespace Kompanion
 {
-protected:
-    Device (juce::String defaultMidiDeviceName);
-    
-    std::unique_ptr<juce::MidiInput> midiInput;
-    std::unique_ptr<juce::MidiOutput> midiOutput;
-    
-    juce::String defaultMidiDeviceName;
-    
-    void initialiseDefaultMidiDevices();
-    
-    void handleIncomingMidiMessage (juce::MidiInput* source, const juce::MidiMessage& message)
+namespace Device
+{
+    class Device : public juce::MidiInputCallback
     {
-        DBG (message.getDescription());
-    }
-};
+    protected:
+        Device (juce::String defaultMidiDeviceName);
 
-} }
+        std::unique_ptr<juce::MidiInput> midiInput;
+        std::unique_ptr<juce::MidiOutput> midiOutput;
+
+        juce::String defaultMidiDeviceName;
+
+        void initialiseDefaultMidiDevices();
+
+        void handleIncomingMidiMessage (juce::MidiInput* source, const juce::MidiMessage& message)
+        {
+            DBG (message.getDescription());
+        }
+    };
+
+} // namespace Device
+} // namespace Kompanion

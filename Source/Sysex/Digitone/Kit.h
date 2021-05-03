@@ -12,15 +12,21 @@
 
 #include "../Sysex.h"
 
-namespace Kompanion { namespace Sysex { namespace Digitone {
-
-class Kit : public Kompanion::Sysex::Sysex
+namespace Kompanion
 {
-public:
-    Kit (juce::MemoryBlock message) : Sysex (message) {};
-    
-    void injectMidiControls();
-    void setTargetKit (int targetKit);
-};
+namespace Sysex
+{
+    namespace Digitone
+    {
+        class Kit : public Kompanion::Sysex::Sysex
+        {
+        public:
+            Kit (juce::MemoryBlock message) : Sysex (message) {};
 
-} } }
+            void injectMidiControls();
+            void setTargetKit (int targetKit);
+        };
+
+    } // namespace Digitone
+} // namespace Sysex
+} // namespace Kompanion

@@ -12,13 +12,15 @@
 
 #include "Device.h"
 
-namespace Kompanion { namespace Device {
-
-class DigiBase : public Device
+namespace Kompanion
 {
-protected:
-    DigiBase (juce::String defaultMidiDeviceName) : Device (defaultMidiDeviceName) {};
+namespace Device
+{
+    class DigiBase : public Device
+    {
+    protected:
+        DigiBase (juce::String defaultMidiDeviceName) : Device (defaultMidiDeviceName) {};
+    };
 
-};
-
-} }
+} // namespace Device
+} // namespace Kompanion

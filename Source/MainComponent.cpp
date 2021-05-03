@@ -12,19 +12,20 @@ MainComponent::MainComponent()
         && ! juce::RuntimePermissions::isGranted (juce::RuntimePermissions::recordAudio))
     {
         juce::RuntimePermissions::request (juce::RuntimePermissions::recordAudio,
-                                           [&] (bool granted) { setAudioChannels (granted ? 2 : 0, 2); });
+                                           [&] (bool granted)
+                                           { setAudioChannels (granted ? 2 : 0, 2); });
     }
     else
     {
         // Specify the number of input and output channels that we want to open
         setAudioChannels (2, 2);
     }
-    
-//    auto syxFile = juce::File ("/Users/td/git/audio/elektron/SendKitTester/digitone_kit1_as2.syx");
-//    jassert (syxFile.existsAsFile());
-//    
-//    juce::MemoryBlock bytes;
-//    jassert (syxFile.loadFileAsData (bytes));
+
+    //    auto syxFile = juce::File ("/Users/td/git/audio/elektron/SendKitTester/digitone_kit1_as2.syx");
+    //    jassert (syxFile.existsAsFile());
+    //
+    //    juce::MemoryBlock bytes;
+    //    jassert (syxFile.loadFileAsData (bytes));
 
     auto inDevices = juce::MidiInput::getAvailableDevices();
     input = juce::MidiInput::openDevice (inDevices[1].identifier, this);
@@ -32,9 +33,9 @@ MainComponent::MainComponent()
 
     auto outDevices = juce::MidiOutput::getAvailableDevices();
     output = juce::MidiOutput::openDevice (outDevices[1].identifier);
-    
-//    syxMessage = juce::MidiMessage::createSysExMessage (bytes.getData(), (int) bytes.getSize());
-    
+
+    //    syxMessage = juce::MidiMessage::createSysExMessage (bytes.getData(), (int) bytes.getSize());
+
     getKit();
 }
 
@@ -94,14 +95,14 @@ void MainComponent::resized()
 void MainComponent::handleIncomingMidiMessage (juce::MidiInput* source,
                                                const juce::MidiMessage& message)
 {
-//    DBG (message.getDescription());
-    
+    //    DBG (message.getDescription());
+
     if (message.isSysEx())
     {
         auto memoryBlock = juce::MemoryBlock (message.getSysExData(), message.getSysExDataSize());
-        
+
         kit = std::make_unique<Kompanion::Sysex::Digitone::Kit> (memoryBlock);
-        
+
         kit->injectMidiControls();
         kit->setTargetKit (1);
 
@@ -110,13 +111,13 @@ void MainComponent::handleIncomingMidiMessage (juce::MidiInput* source,
     else if (message.isProgramChange())
     {
         getKit();
-//        output->sendMessageNow (syxMessage);
+        //        output->sendMessageNow (syxMessage);
     }
 }
 
 void MainComponent::getKit()
 {
-    uint8_t request[13] = {0x00, 0x20, 0x3c, 0x0d, 0x00, 0x62, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x05};
-    
+    uint8_t request[13] = { 0x00, 0x20, 0x3c, 0x0d, 0x00, 0x62, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x05 };
+
     output->sendMessageNow (juce::MidiMessage::createSysExMessage (request, 13));
 }

@@ -12,12 +12,15 @@
 
 #include "DigiBase.h"
 
-namespace Kompanion { namespace Device {
-
-class Digitone : public DigiBase
+namespace Kompanion
 {
-public:
-    Digitone() : DigiBase ("Elektron Digitone") {};
-};
- 
-} }
+namespace Device
+{
+    class Digitone : public DigiBase
+    {
+    public:
+        Digitone() : DigiBase ("Elektron Digitone") {};
+    };
+
+} // namespace Device
+} // namespace Kompanion
