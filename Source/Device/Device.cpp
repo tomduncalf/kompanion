@@ -17,6 +17,12 @@ namespace Device
     Device::Device (juce::String defaultMidiDeviceName) : defaultMidiDeviceName (defaultMidiDeviceName)
     {
         initialiseDefaultMidiDevices();
+
+        patternChangeCallbacks.emplace_back ([this] (int lastPattern, int currentPattern)
+                                             {
+                                                 DBG (lastPattern << " to " << currentPattern);
+                                                 return true;
+                                             });
     }
 
     void Device::initialiseDefaultMidiDevices()
@@ -46,6 +52,18 @@ namespace Device
         jassert (midiOutput != nullptr);
 
         midiInput->start();
+    }
+
+    void Device::handleIncomingMidiMessage (juce::MidiInput* source, const juce::MidiMessage& message)
+    {
+        DBG (message.getDescription());
+
+        if (message.isProgramChange())
+        {
+            auto lastPattern = currentPattern;
+            currentPattern = message.getProgramChangeNumber();
+            callCallbacks (patternChangeCallbacks, lastPattern, currentPattern);
+        }
     }
 
 } // namespace Device
