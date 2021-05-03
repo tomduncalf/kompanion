@@ -17,6 +17,10 @@
           <FILE id="cEtgcx" name="Kit.cpp" compile="1" resource="0" file="Source/Sysex/Digitone/Kit.cpp"/>
           <FILE id="gA8lxO" name="Kit.h" compile="0" resource="0" file="Source/Sysex/Digitone/Kit.h"/>
         </GROUP>
+        <FILE id="DJQeLg" name="KitBase.cpp" compile="1" resource="0" file="Source/Sysex/KitBase.cpp"/>
+        <FILE id="pfiqoE" name="KitBase.h" compile="0" resource="0" file="Source/Sysex/KitBase.h"/>
+        <FILE id="mScLp9" name="Request.cpp" compile="1" resource="0" file="Source/Sysex/Request.cpp"/>
+        <FILE id="gj4OaK" name="Request.h" compile="0" resource="0" file="Source/Sysex/Request.h"/>
         <FILE id="vIyiCl" name="Sysex.cpp" compile="1" resource="0" file="Source/Sysex/Sysex.cpp"/>
         <FILE id="MssqJD" name="Sysex.h" compile="0" resource="0" file="Source/Sysex/Sysex.h"/>
       </GROUP>

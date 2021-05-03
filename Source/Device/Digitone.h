@@ -19,7 +19,7 @@ namespace Device
     class Digitone : public DigiBase
     {
     public:
-        Digitone() : DigiBase ("Elektron Digitone") {};
+        Digitone() : DigiBase ("Elektron Digitone", 0x0D) {};
     };
 
 } // namespace Device

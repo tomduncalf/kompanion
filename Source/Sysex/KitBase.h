@@ -10,23 +10,21 @@
 
 #pragma once
 
-#include "../KitBase.h"
+#include "Sysex.h"
 
 namespace Kompanion
 {
 namespace Sysex
 {
-    namespace Digitone
+    class KitBase : public Kompanion::Sysex::Sysex
     {
-        class Kit : public KitBase
-        {
-        public:
-            Kit (juce::MemoryBlock message) : KitBase (message) {};
+    protected:
+        KitBase (juce::MemoryBlock message) : Sysex (message) {};
+        virtual ~KitBase() {};
 
-            void injectMidiControls() override;
-            void setTargetKit (int targetKit) override;
-        };
+        virtual void injectMidiControls() = 0;
+        virtual void setTargetKit (int targetKit) = 0;
+    };
 
-    } // namespace Digitone
 } // namespace Sysex
 } // namespace Kompanion

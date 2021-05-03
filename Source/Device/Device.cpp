@@ -10,11 +10,15 @@
 
 #include "Device.h"
 
+#include "../Sysex/Request.h"
+
 namespace Kompanion
 {
 namespace Device
 {
-    Device::Device (juce::String defaultMidiDeviceName) : defaultMidiDeviceName (defaultMidiDeviceName)
+    Device::Device (juce::String defaultMidiDeviceName,
+                    uint8_t deviceSysexId) : defaultMidiDeviceName (defaultMidiDeviceName),
+                                             deviceSysexId (deviceSysexId)
     {
         initialiseDefaultMidiDevices();
 
@@ -23,6 +27,14 @@ namespace Device
                                                  DBG (lastPattern << " to " << currentPattern);
                                                  return true;
                                              });
+
+        kitCallbacks.emplace_back ([this] (Kompanion::Sysex::KitBase& kit)
+                                   {
+                                       DBG ("got kit");
+                                       return true;
+                                   });
+
+        requestKit (0);
     }
 
     void Device::initialiseDefaultMidiDevices()
@@ -54,6 +66,13 @@ namespace Device
         midiInput->start();
     }
 
+    void Device::requestKit (int index)
+    {
+        Kompanion::Sysex::Request request (deviceSysexId, 0x62, 0);
+
+        midiOutput->sendMessageNow (request.getMessage());
+    }
+
     void Device::handleIncomingMidiMessage (juce::MidiInput* source, const juce::MidiMessage& message)
     {
         DBG (message.getDescription());
@@ -63,6 +82,13 @@ namespace Device
             auto lastPattern = currentPattern;
             currentPattern = message.getProgramChangeNumber();
             callCallbacks (patternChangeCallbacks, lastPattern, currentPattern);
+        }
+        else if (message.isSysEx())
+        {
+            auto memoryBlock = juce::MemoryBlock (message.getSysExData(), static_cast<size_t> (message.getSysExDataSize()));
+
+            if (message.getSysExData()[5] == 0x52)
+                callCallbacks (kitCallbacks, Kompanion::Sysex::Digitone::Kit (memoryBlock));
         }
     }
 

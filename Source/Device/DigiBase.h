@@ -19,7 +19,9 @@ namespace Device
     class DigiBase : public Device
     {
     protected:
-        DigiBase (juce::String defaultMidiDeviceName) : Device (defaultMidiDeviceName) {};
+        DigiBase (juce::String defaultMidiDeviceName,
+                  uint8_t deviceSysexId) : Device (defaultMidiDeviceName,
+                                                   deviceSysexId) {};
     };
 
 } // namespace Device
