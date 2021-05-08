@@ -22,19 +22,17 @@ namespace Device
     {
         initialiseDefaultMidiDevices();
 
-        patternChangeCallbacks.emplace_back ([this] (int lastPattern, int currentPattern)
+        /*patternChangeCallbacks.emplace_back ([this] (int lastPattern, int currentPattern)
                                              {
-                                                 DBG (lastPattern << " to " << currentPattern);
+                                                 DBG ("Pattern change from " << lastPattern << " to " << currentPattern);
                                                  return true;
-                                             });
+                                             });*/
 
-        kitCallbacks.emplace_back ([this] (std::unique_ptr<Kompanion::Sysex::KitBase> kit)
+        /*kitCallbacks.emplace_back ([this] (std::unique_ptr<Kompanion::Sysex::KitBase> kit)
                                    {
-                                       DBG ("got kit");
+                                       DBG ("Received kit from device");
                                        return true;
-                                   });
-
-        requestKit (0);
+                                   });*/
     }
 
     void Device::initialiseDefaultMidiDevices()

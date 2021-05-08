@@ -4,6 +4,15 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="Q6CY3a" name="Kompanion">
     <GROUP id="{26973403-33BC-8D60-13ED-0543D2CFFDB0}" name="Source">
+      <GROUP id="{637DDA92-DC25-5263-05ED-4660C746D0BF}" name="Behaviour">
+        <FILE id="hIN3om" name="BehaviourBase.cpp" compile="1" resource="0"
+              file="Source/Behaviour/BehaviourBase.cpp"/>
+        <FILE id="PBZLdw" name="BehaviourBase.h" compile="0" resource="0" file="Source/Behaviour/BehaviourBase.h"/>
+        <FILE id="lbIDWv" name="KitLockBehaviour.cpp" compile="1" resource="0"
+              file="Source/Behaviour/KitLockBehaviour.cpp"/>
+        <FILE id="B288Cg" name="KitLockBehaviour.h" compile="0" resource="0"
+              file="Source/Behaviour/KitLockBehaviour.h"/>
+      </GROUP>
       <GROUP id="{474C4658-1633-F758-D705-FC2F41B469EC}" name="Device">
         <FILE id="VJUBgf" name="Device.cpp" compile="1" resource="0" file="Source/Device/Device.cpp"/>
         <FILE id="eqqKj7" name="Device.h" compile="0" resource="0" file="Source/Device/Device.h"/>
