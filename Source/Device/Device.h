@@ -24,11 +24,25 @@ namespace Device
 
     class Device : public juce::MidiInputCallback
     {
+    public:
+        void addPatternChangeCallback (PatternChangeCallback callback);
+        void addKitCallback (KitCallback callback);
+
+        void requestKit (int index);
+
+        void sendMessage (const juce::MidiMessage& message);
+
     protected:
         Device (juce::String defaultMidiDeviceName, uint8_t deviceSysexId);
 
         std::unique_ptr<juce::MidiInput> midiInput;
         std::unique_ptr<juce::MidiOutput> midiOutput;
+
+        template <typename T>
+        void addCallback (T callback, std::vector<T>& callbackList)
+        {
+            callbackList.push_back (callback);
+        }
 
         std::vector<PatternChangeCallback> patternChangeCallbacks;
         std::vector<KitCallback> kitCallbacks;
@@ -39,8 +53,6 @@ namespace Device
         int currentPattern = 0;
 
         void initialiseDefaultMidiDevices();
-
-        void requestKit (int index);
 
         virtual std::unique_ptr<Sysex::KitBase> createKit (juce::MemoryBlock message) = 0;
 

@@ -21,22 +21,8 @@ MainComponent::MainComponent()
         setAudioChannels (2, 2);
     }
 
-    //    auto syxFile = juce::File ("/Users/td/git/audio/elektron/SendKitTester/digitone_kit1_as2.syx");
-    //    jassert (syxFile.existsAsFile());
-    //
-    //    juce::MemoryBlock bytes;
-    //    jassert (syxFile.loadFileAsData (bytes));
-
-    auto inDevices = juce::MidiInput::getAvailableDevices();
-    input = juce::MidiInput::openDevice (inDevices[1].identifier, this);
-    input->start();
-
-    auto outDevices = juce::MidiOutput::getAvailableDevices();
-    output = juce::MidiOutput::openDevice (outDevices[1].identifier);
-
-    //    syxMessage = juce::MidiMessage::createSysExMessage (bytes.getData(), (int) bytes.getSize());
-
-    getKit();
+    behaviours.push_back (std::make_unique<Behaviour::KitLockBehaviour> (device));
+    behaviours[0]->enable();
 }
 
 MainComponent::~MainComponent()
@@ -90,34 +76,4 @@ void MainComponent::resized()
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
-}
-
-void MainComponent::handleIncomingMidiMessage (juce::MidiInput* source,
-                                               const juce::MidiMessage& message)
-{
-    //    DBG (message.getDescription());
-
-    if (message.isSysEx())
-    {
-        auto memoryBlock = juce::MemoryBlock (message.getSysExData(), message.getSysExDataSize());
-
-        kit = std::make_unique<Sysex::Digitone::Kit> (memoryBlock);
-
-        kit->injectMidiControls();
-        kit->setTargetKit (1);
-
-        output->sendMessageNow (kit->getMessage());
-    }
-    else if (message.isProgramChange())
-    {
-        getKit();
-        //        output->sendMessageNow (syxMessage);
-    }
-}
-
-void MainComponent::getKit()
-{
-    uint8_t request[13] = { 0x00, 0x20, 0x3c, 0x0d, 0x00, 0x62, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x05 };
-
-    output->sendMessageNow (juce::MidiMessage::createSysExMessage (request, 13));
 }

@@ -64,16 +64,33 @@ namespace Device
         midiInput->start();
     }
 
+    void Device::addKitCallback (KitCallback callback)
+    {
+        addCallback (callback, kitCallbacks);
+    }
+
+    void Device::addPatternChangeCallback (PatternChangeCallback callback)
+    {
+        addCallback (callback, patternChangeCallbacks);
+    }
+
     void Device::requestKit (int index)
     {
-        Sysex::Request request (deviceSysexId, 0x62, 0);
+        DBG ("requestKit " << index);
 
-        midiOutput->sendMessageNow (request.getMessage());
+        Sysex::Request request (deviceSysexId, 0x62, index);
+
+        sendMessage (request.getMessage());
+    }
+
+    void Device::sendMessage (const juce::MidiMessage& message)
+    {
+        midiOutput->sendMessageNow (message);
     }
 
     void Device::handleIncomingMidiMessage (juce::MidiInput* source, const juce::MidiMessage& message)
     {
-        DBG (message.getDescription());
+        DBG ("Received MIDI: " << message.getDescription());
 
         if (message.isProgramChange())
         {

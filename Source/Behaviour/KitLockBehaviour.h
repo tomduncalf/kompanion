@@ -18,7 +18,11 @@ namespace Behaviour
 {
     class KitLockBehaviour : public BehaviourBase
     {
-        //    KitLockBehaviour()
+    public:
+        KitLockBehaviour (Device::Device& device);
+
+        void enable() override;
+        void disable() override;
     };
 } // namespace Behaviour
 } // namespace Kompanion

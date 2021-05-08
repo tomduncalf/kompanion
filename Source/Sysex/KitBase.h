@@ -21,11 +21,11 @@ namespace Sysex
     public:
         virtual ~KitBase() {};
 
-    protected:
-        KitBase (juce::MemoryBlock message) : Sysex (message) {};
-
         virtual void injectMidiControls() = 0;
         virtual void setTargetKit (int targetKit) = 0;
+
+    protected:
+        KitBase (juce::MemoryBlock message) : Sysex (message) {};
     };
 
 } // namespace Sysex
