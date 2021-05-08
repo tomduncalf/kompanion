@@ -18,9 +18,11 @@ namespace Sysex
 {
     class KitBase : public Kompanion::Sysex::Sysex
     {
+    public:
+        virtual ~KitBase() {};
+
     protected:
         KitBase (juce::MemoryBlock message) : Sysex (message) {};
-        virtual ~KitBase() {};
 
         virtual void injectMidiControls() = 0;
         virtual void setTargetKit (int targetKit) = 0;

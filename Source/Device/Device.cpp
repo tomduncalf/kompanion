@@ -28,7 +28,7 @@ namespace Device
                                                  return true;
                                              });
 
-        kitCallbacks.emplace_back ([this] (Kompanion::Sysex::KitBase& kit)
+        kitCallbacks.emplace_back ([this] (std::shared_ptr<Kompanion::Sysex::KitBase> kit)
                                    {
                                        DBG ("got kit");
                                        return true;
@@ -88,7 +88,9 @@ namespace Device
             auto memoryBlock = juce::MemoryBlock (message.getSysExData(), static_cast<size_t> (message.getSysExDataSize()));
 
             if (message.getSysExData()[5] == 0x52)
-                callCallbacks (kitCallbacks, Kompanion::Sysex::Digitone::Kit (memoryBlock));
+            {
+                callCallbacks (kitCallbacks, createKit (memoryBlock));
+            }
         }
     }
 

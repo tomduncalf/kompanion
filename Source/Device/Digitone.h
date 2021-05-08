@@ -12,6 +12,8 @@
 
 #include "DigiBase.h"
 
+#include "../Sysex/Digitone/Kit.h"
+
 namespace Kompanion
 {
 namespace Device
@@ -20,6 +22,9 @@ namespace Device
     {
     public:
         Digitone() : DigiBase ("Elektron Digitone", 0x0D) {};
+
+    protected:
+        std::shared_ptr<Kompanion::Sysex::KitBase> createKit (juce::MemoryBlock message) override;
     };
 
 } // namespace Device
