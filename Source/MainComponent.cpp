@@ -101,7 +101,7 @@ void MainComponent::handleIncomingMidiMessage (juce::MidiInput* source,
     {
         auto memoryBlock = juce::MemoryBlock (message.getSysExData(), message.getSysExDataSize());
 
-        kit = std::make_unique<Kompanion::Sysex::Digitone::Kit> (memoryBlock);
+        kit = std::make_unique<Sysex::Digitone::Kit> (memoryBlock);
 
         kit->injectMidiControls();
         kit->setTargetKit (1);

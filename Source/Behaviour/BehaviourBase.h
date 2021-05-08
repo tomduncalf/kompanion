@@ -21,9 +21,9 @@ namespace Behaviour
     class BehaviourBase
     {
     protected:
-        BehaviourBase (Kompanion::Device::Device& device);
+        BehaviourBase (Device::Device& device);
 
-        Kompanion::Device::Device& device;
+        Device::Device& device;
     };
 } // namespace Behaviour
 } // namespace Kompanion

@@ -16,7 +16,7 @@ namespace Kompanion
 {
 namespace Sysex
 {
-    class KitBase : public Kompanion::Sysex::Sysex
+    class KitBase : public Sysex::Sysex
     {
     public:
         virtual ~KitBase() {};

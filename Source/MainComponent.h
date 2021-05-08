@@ -5,6 +5,8 @@
 #include "Device/Digitone.h"
 #include "Sysex/Digitone/Kit.h"
 
+using namespace Kompanion;
+
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
@@ -40,8 +42,8 @@ private:
 
     void getKit();
 
-    std::unique_ptr<Kompanion::Sysex::Digitone::Kit> kit;
-    Kompanion::Device::Digitone device;
+    std::unique_ptr<Sysex::Digitone::Kit> kit;
+    Device::Digitone device;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

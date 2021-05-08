@@ -20,7 +20,7 @@ namespace Kompanion
 namespace Device
 {
     using PatternChangeCallback = std::function<bool (int, int)>;
-    using KitCallback = std::function<bool (std::unique_ptr<Kompanion::Sysex::KitBase>)>;
+    using KitCallback = std::function<bool (std::unique_ptr<Sysex::KitBase>)>;
 
     class Device : public juce::MidiInputCallback
     {
@@ -42,7 +42,7 @@ namespace Device
 
         void requestKit (int index);
 
-        virtual std::unique_ptr<Kompanion::Sysex::KitBase> createKit (juce::MemoryBlock message) = 0;
+        virtual std::unique_ptr<Sysex::KitBase> createKit (juce::MemoryBlock message) = 0;
 
         void handleIncomingMidiMessage (juce::MidiInput* source, const juce::MidiMessage& message);
 

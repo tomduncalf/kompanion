@@ -28,7 +28,7 @@ namespace Device
                                                  return true;
                                              });*/
 
-        /*kitCallbacks.emplace_back ([this] (std::unique_ptr<Kompanion::Sysex::KitBase> kit)
+        /*kitCallbacks.emplace_back ([this] (std::unique_ptr<Sysex::KitBase> kit)
                                    {
                                        DBG ("Received kit from device");
                                        return true;
@@ -66,7 +66,7 @@ namespace Device
 
     void Device::requestKit (int index)
     {
-        Kompanion::Sysex::Request request (deviceSysexId, 0x62, 0);
+        Sysex::Request request (deviceSysexId, 0x62, 0);
 
         midiOutput->sendMessageNow (request.getMessage());
     }
