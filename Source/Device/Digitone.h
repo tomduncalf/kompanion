@@ -24,7 +24,7 @@ namespace Device
         Digitone() : DigiBase ("Elektron Digitone", 0x0D) {};
 
     protected:
-        std::shared_ptr<Kompanion::Sysex::KitBase> createKit (juce::MemoryBlock message) override;
+        std::unique_ptr<Kompanion::Sysex::KitBase> createKit (juce::MemoryBlock message) override;
     };
 
 } // namespace Device

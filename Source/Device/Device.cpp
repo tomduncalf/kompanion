@@ -28,7 +28,7 @@ namespace Device
                                                  return true;
                                              });
 
-        kitCallbacks.emplace_back ([this] (std::shared_ptr<Kompanion::Sysex::KitBase> kit)
+        kitCallbacks.emplace_back ([this] (std::unique_ptr<Kompanion::Sysex::KitBase> kit)
                                    {
                                        DBG ("got kit");
                                        return true;

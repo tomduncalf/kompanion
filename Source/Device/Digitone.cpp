@@ -14,9 +14,9 @@ namespace Kompanion
 {
 namespace Device
 {
-    std::shared_ptr<Kompanion::Sysex::KitBase> Digitone::createKit (juce::MemoryBlock message)
+    std::unique_ptr<Kompanion::Sysex::KitBase> Digitone::createKit (juce::MemoryBlock message)
     {
-        return std::make_shared<Kompanion::Sysex::Digitone::Kit> (message);
+        return std::make_unique<Kompanion::Sysex::Digitone::Kit> (message);
     }
 } // namespace Device
 } // namespace Kompanion

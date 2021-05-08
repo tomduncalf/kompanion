@@ -20,7 +20,7 @@ namespace Kompanion
 namespace Device
 {
     using PatternChangeCallback = std::function<bool (int, int)>;
-    using KitCallback = std::function<bool (std::shared_ptr<Kompanion::Sysex::KitBase>)>;
+    using KitCallback = std::function<bool (std::unique_ptr<Kompanion::Sysex::KitBase>)>;
 
     class Device : public juce::MidiInputCallback
     {
@@ -42,16 +42,16 @@ namespace Device
 
         void requestKit (int index);
 
-        virtual std::shared_ptr<Kompanion::Sysex::KitBase> createKit (juce::MemoryBlock message) = 0;
+        virtual std::unique_ptr<Kompanion::Sysex::KitBase> createKit (juce::MemoryBlock message) = 0;
 
         void handleIncomingMidiMessage (juce::MidiInput* source, const juce::MidiMessage& message);
 
-        template <typename T, typename... Targs>
-        void callCallbacks (std::vector<T>& callbacks, Targs... Fargs)
+        template <typename T, typename... Args>
+        void callCallbacks (std::vector<T>& callbacks, Args... args)
         {
             for (auto callback = callbacks.begin(); callback < callbacks.end(); ++callback)
             {
-                auto removeCallback = (*callback) (Fargs...);
+                auto removeCallback = (*callback) (std::forward<Args&&> (args)...);
 
                 if (removeCallback)
                     callback = callbacks.erase (callback);
