@@ -5,8 +5,9 @@
  */
 
 import { assert } from "console";
+import { runInAction } from "mobx";
 import { InputStream } from "./InputStream";
-import { ValueTree } from "./ValueTree";
+import { USE_MOBX, ValueTree } from "./ValueTree";
 
 // For jest
 const TextEncoderImpl =
@@ -22,6 +23,9 @@ enum ChangeType {
   childMoved = 5,
   propertyRemoved = 6,
 }
+
+const performUpdate = (fn: () => void) =>
+  USE_MOBX ? runInAction(() => fn()) : fn();
 
 export const applyChange = (valueTree: ValueTree, input: string): boolean => {
   const inputStream = new InputStream(new TextEncoderImpl().encode(input));
@@ -40,26 +44,38 @@ export const applyChange = (valueTree: ValueTree, input: string): boolean => {
   switch (type) {
     case ChangeType.propertyChanged: {
       const property = inputStream.readString();
-      subtree.properties.set(property, inputStream.readVar());
+      performUpdate(() => {
+        subtree.properties.set(property, inputStream.readVar());
+      });
       return true;
     }
 
     case ChangeType.propertyRemoved: {
       const property = inputStream.readString();
-      subtree.properties.delete(property);
+      performUpdate(() => {
+        subtree.properties.delete(property);
+      });
       return true;
     }
 
     case ChangeType.childAdded: {
       const index = inputStream.readCompressedInt();
-      subtree.children.splice(index, 0, ValueTree.readFromStream(inputStream));
+      performUpdate(() => {
+        subtree.children.splice(
+          index,
+          0,
+          ValueTree.readFromStream(inputStream)
+        );
+      });
       return true;
     }
 
     case ChangeType.childRemoved: {
       const index = inputStream.readCompressedInt();
       if (index < subtree.children.length && index >= 0) {
-        subtree.children.splice(index, 1);
+        performUpdate(() => {
+          subtree.children.splice(index, 1);
+        });
         return true;
       }
 
@@ -80,10 +96,11 @@ export const applyChange = (valueTree: ValueTree, input: string): boolean => {
         newIndex < subtree.children.length &&
         newIndex >= 0
       ) {
-        const temp = subtree.children[oldIndex];
-        subtree.children[oldIndex] = subtree.children[newIndex];
-        subtree.children[newIndex] = temp;
-
+        performUpdate(() => {
+          const temp = subtree.children[oldIndex];
+          subtree.children[oldIndex] = subtree.children[newIndex];
+          subtree.children[newIndex] = temp;
+        });
         return true;
       }
 

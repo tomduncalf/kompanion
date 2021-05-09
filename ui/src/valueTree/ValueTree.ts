@@ -3,7 +3,10 @@
  * allow us to have a synchronised read-only copy of an app's state in JS
  */
 
+export const USE_MOBX = true;
+
 import { assert } from "console";
+import { action, makeObservable, observable } from "mobx";
 import { InputStream, JuceVariant } from "./InputStream";
 
 export class ValueTree {
@@ -12,7 +15,17 @@ export class ValueTree {
     public properties: Map<string, JuceVariant> = new Map(),
     public children: ValueTree[] = [],
     public parent: ValueTree | undefined = undefined
-  ) {}
+  ) {
+    if (USE_MOBX) {
+      makeObservable(this, {
+        type: observable,
+        properties: observable,
+        children: observable,
+        parent: observable,
+        replaceWithValueTree: action,
+      });
+    }
+  }
 
   isValid = (): boolean => {
     return this.type !== "";
