@@ -8,6 +8,12 @@ import { assert } from "console";
 import { InputStream } from "./InputStream";
 import { ValueTree } from "./ValueTree";
 
+// For jest
+const TextEncoderImpl =
+  typeof TextEncoder !== "undefined"
+    ? TextEncoder
+    : require("util").TextEncoder;
+
 enum ChangeType {
   propertyChanged = 1,
   fullSync = 2,
@@ -18,7 +24,7 @@ enum ChangeType {
 }
 
 export const applyChange = (valueTree: ValueTree, input: string): boolean => {
-  const inputStream = new InputStream(new TextEncoder().encode(input));
+  const inputStream = new InputStream(new TextEncoderImpl().encode(input));
 
   const type: ChangeType = inputStream.readByte();
 

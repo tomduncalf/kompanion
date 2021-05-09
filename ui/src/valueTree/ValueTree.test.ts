@@ -6,7 +6,14 @@ import { ValueTree } from "./ValueTree";
 describe("readFromStream", () => {
   test("read tree successfully", () => {
     const file = readFileSync(
-      join(__dirname, "..", "..", "testAssets", "valueTree")
+      join(
+        __dirname,
+        "..",
+        "..",
+        "testAssets",
+        "valueTree",
+        "valueTreeFull.bin"
+      )
     );
     const tree = ValueTree.readFromStream(
       new InputStream(new Uint8Array(file))
