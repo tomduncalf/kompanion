@@ -79,7 +79,7 @@ export class InputStream {
     const numBytes = sizeByte & 0x7f;
 
     if (numBytes > 4) {
-      assert(false);
+      assert(false, "Data is corrupted");
       return 0;
     }
 
@@ -99,7 +99,7 @@ export class InputStream {
     const numBytes = this.readCompressedInt();
 
     if (numBytes === 0) {
-      assert(false); // I think this is an error?
+      assert(false, "Data is corrupted (I think!)");
       return undefined;
     }
 

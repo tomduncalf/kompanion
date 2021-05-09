@@ -4,15 +4,14 @@
  */
 
 import { assert } from "console";
-import { InputStream } from "./InputStream";
-
-type PropertyType = string | number | boolean;
+import { InputStream, JuceVariant } from "./InputStream";
 
 export class ValueTree {
   constructor(
     public type: string = "",
-    public properties: Record<string, PropertyType> = {},
-    public children: ValueTree[] = []
+    public properties: Record<string, JuceVariant> = {},
+    public children: ValueTree[] = [],
+    public parent: ValueTree | undefined = undefined
   ) {}
 
   isValid = (): boolean => {
@@ -27,18 +26,31 @@ export class ValueTree {
     const tree = new ValueTree(type);
     const numProps = input.readCompressedInt();
 
-    if (numProps < 0)
-    {
-      assert(false); // Data is corrupted
-      return tree
+    if (numProps < 0) {
+      assert(false, "Data is corrupted");
+      return tree;
     }
 
-    for (let i = 0; i<numProps;i++)
-    {
+    for (let i = 0; i < numProps; i++) {
       const name = input.readString();
 
-      if (name !== '')
-      tree.properties[name] =
+      if (name !== "") {
+        tree.properties[name] = input.readVar();
+      } else {
+        assert(false, "Data is corrupted");
+      }
     }
+
+    const numChildren = input.readCompressedInt();
+    for (let i = 0; i < numChildren; i++) {
+      const child = ValueTree.readFromStream(input);
+
+      if (!child.isValid()) return tree;
+
+      tree.children.push(child);
+      child.parent = tree;
+    }
+
+    return tree;
   }
 }
