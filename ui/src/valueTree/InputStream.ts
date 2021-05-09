@@ -3,8 +3,6 @@
  * to allow us to parse data out of the encoded ValueTree changes
  */
 
-import { assert } from "console";
-
 // For jest
 const TextDecoderImpl =
   typeof TextDecoder !== "undefined"
@@ -79,7 +77,7 @@ export class InputStream {
     const numBytes = sizeByte & 0x7f;
 
     if (numBytes > 4) {
-      assert(false, "Data is corrupted");
+      console.assert(false, "Data is corrupted");
       return 0;
     }
 
@@ -99,7 +97,7 @@ export class InputStream {
     const numBytes = this.readCompressedInt();
 
     if (numBytes === 0) {
-      assert(false, "Data is corrupted (I think!)");
+      console.assert(false, "Data is corrupted (I think!)");
       return undefined;
     }
 
