@@ -1,19 +1,13 @@
 import { readFileSync } from "fs";
 import { join } from "path";
+import { TEST_ASSETS_PATH } from "../../test/utils";
 import { InputStream } from "./InputStream";
 import { ValueTree } from "./ValueTree";
 
 describe("readFromStream", () => {
   test("read tree successfully", () => {
     const file = readFileSync(
-      join(
-        __dirname,
-        "..",
-        "..",
-        "testAssets",
-        "valueTree",
-        "valueTreeFull.bin"
-      )
+      join(TEST_ASSETS_PATH, "valueTree", "valueTreeFull.bin")
     );
     const tree = ValueTree.readFromStream(
       new InputStream(new Uint8Array(file))
