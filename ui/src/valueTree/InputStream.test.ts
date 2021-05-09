@@ -16,6 +16,46 @@ describe("readString", () => {
   });
 });
 
+describe("readInt", () => {
+  test("1 byte", () => {
+    const stream = new InputStream(Uint8Array.from([0x7b]));
+    expect(stream.readInt()).toEqual(123);
+  });
+
+  test("2 bytes", () => {
+    const stream = new InputStream(Uint8Array.from([0xd2, 0x04]));
+    expect(stream.readInt()).toEqual(1234);
+  });
+
+  test("3 bytes", () => {
+    const stream = new InputStream(Uint8Array.from([0x87, 0xd6, 0x12]));
+    expect(stream.readInt()).toEqual(1234567);
+  });
+
+  test("4 bytes", () => {
+    const stream = new InputStream(Uint8Array.from([0x15, 0xcd, 0x5b, 0x07]));
+    expect(stream.readInt()).toEqual(123456789);
+  });
+});
+
+describe("readInt64", () => {
+  test("8 bytes", () => {
+    const stream = new InputStream(
+      Uint8Array.from([0xf8, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f])
+    );
+    expect(stream.readInt64().toString()).toEqual("9223372036854775800");
+  });
+});
+
+describe("readDouble", () => {
+  test("8 bytes", () => {
+    const stream = new InputStream(
+      Uint8Array.from([0x72, 0xda, 0xf8, 0xb8, 0xdb, 0x9a, 0xbf, 0x3f])
+    );
+    expect(stream.readDouble()).toEqual(0.1234567);
+  });
+});
+
 // Using compressedInt values written to a file in JUCE
 describe("readCompressedInt", () => {
   test("1 byte", () => {

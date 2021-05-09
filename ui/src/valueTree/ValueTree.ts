@@ -3,6 +3,7 @@
  * allow us to have a synchronised read-only copy of an app's state in JS
  */
 
+import { assert } from "console";
 import { InputStream } from "./InputStream";
 
 type PropertyType = string | number | boolean;
@@ -25,5 +26,19 @@ export class ValueTree {
 
     const tree = new ValueTree(type);
     const numProps = input.readCompressedInt();
+
+    if (numProps < 0)
+    {
+      assert(false); // Data is corrupted
+      return tree
+    }
+
+    for (let i = 0; i<numProps;i++)
+    {
+      const name = input.readString();
+
+      if (name !== '')
+      tree.properties[name] =
+    }
   }
 }

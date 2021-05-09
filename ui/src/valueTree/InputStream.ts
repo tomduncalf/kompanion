@@ -1,5 +1,29 @@
 import { assert } from "console";
 
+if (typeof window === "undefined") {
+  const { TextDecoder } = require("util");
+}
+
+enum VariantStreamMarkers {
+  varMarker_Int = 1,
+  varMarker_BoolTrue = 2,
+  varMarker_BoolFalse = 3,
+  varMarker_Double = 4,
+  varMarker_String = 5,
+  varMarker_Int64 = 6,
+  varMarker_Array = 7,
+  varMarker_Binary = 8,
+  varMarker_Undefined = 9,
+}
+
+type JuceVariant =
+  | number
+  | BigInt
+  | string
+  | boolean
+  | undefined
+  | JuceVariant[];
+
 export class InputStream {
   constructor(private data: Uint8Array) {}
 
@@ -22,6 +46,24 @@ export class InputStream {
     return byte;
   };
 
+  readInt = (): number => {
+    const bytes = this.read(4);
+    // TODO error handling
+    return this.makeInt32(bytes);
+  };
+
+  readInt64 = (): BigInt => {
+    const bytes = this.read(8);
+    // TODO error handling
+    return this.makeInt64(bytes);
+  };
+
+  readDouble = (): number => {
+    const bytes = this.read(8);
+    // TODO error handling
+    return this.makeDouble(bytes);
+  };
+
   readCompressedInt = (): number => {
     const sizeByte = this.readByte();
 
@@ -41,11 +83,62 @@ export class InputStream {
       bytes[i] = this.readByte();
     }
 
-    // from ByteOrder::makeInt
-    const number =
-      bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24);
+    const number = this.makeInt32(bytes);
 
     return sizeByte >> 7 ? -number : number;
+  };
+
+  readVar = (): JuceVariant => {
+    const numBytes = this.readCompressedInt();
+
+    if (numBytes === 0) {
+      assert(false); // I think this is an error?
+      return undefined;
+    }
+
+    switch (this.readByte()) {
+      case VariantStreamMarkers.varMarker_Int:
+        return this.readInt();
+      case VariantStreamMarkers.varMarker_Int64:
+        throw new Error("Not implemented");
+      case VariantStreamMarkers.varMarker_BoolTrue:
+        return true;
+      case VariantStreamMarkers.varMarker_BoolFalse:
+        return false;
+      case VariantStreamMarkers.varMarker_Double:
+        return this.readDouble();
+      case VariantStreamMarkers.varMarker_String:
+        return new TextDecoder().decode(this.read(numBytes));
+      case VariantStreamMarkers.varMarker_Binary:
+        throw new Error("Not implemented");
+      case VariantStreamMarkers.varMarker_Array:
+        const array = [];
+        for (let i = this.readCompressedInt(); --i >= 0; )
+          array.push(this.readVar());
+        return array;
+      default:
+        this.incrementReadPosition(numBytes - 1);
+    }
+  };
+
+  private makeInt32 = (bytes: number[] | Uint8Array): number => {
+    // from ByteOrder::makeInt
+    return bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24);
+  };
+
+  // from https://stackoverflow.com/questions/33137519/how-to-left-shift-numbers-greater-than-32-bits
+  shift = (number: number, shift: number) => {
+    return number * Math.pow(2, shift);
+  };
+
+  private makeInt64 = (bytes: Uint8Array): BigInt => {
+    const dataView = new DataView(bytes.buffer);
+    return dataView.getBigInt64(0, true);
+  };
+
+  private makeDouble = (bytes: Uint8Array): number => {
+    const dataView = new DataView(bytes.buffer);
+    return dataView.getFloat64(0, true);
   };
 
   private incrementReadPosition = (delta: number) => {
@@ -55,18 +148,11 @@ export class InputStream {
     );
   };
 
-  // read = (size: number): string => {
-  //   while (size > 0)
-  //   {
-  //       const numToRead = Math.min(size, 0x70000000);
-  //       const numRead = this.read (juce::addBytesToPointer (destBuffer, totalRead), numToRead);
-  //       jassert (numRead <= numToRead);
+  private read = (size: number): Uint8Array => {
+    const readPosition = this.readPosition;
+    this.incrementReadPosition(size);
 
-  //       if (numRead < 0) return (ssize_t) numRead;
-  //       if (numRead == 0) break;
-
-  //       size -= (size_t) numRead;
-  //       totalRead += numRead;
-  //   }
-  // }
+    // TODO error handling
+    return this.data.slice(readPosition, readPosition + size);
+  };
 }
