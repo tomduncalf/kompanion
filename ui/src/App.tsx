@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { observer } from "mobx-react";
+import { ValueTree } from "./valueTree/ValueTree";
 
-function App() {
+const valueTree = new ValueTree("test");
+
+const App = observer(() => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="App">{valueTree.type}</div>
+      <button
+        onClick={() => {
+          valueTree.type = "test2";
+          console.log(valueTree.type);
+        }}
+      >
+        do something
+      </button>
+    </>
   );
-}
+});
 
 export default App;

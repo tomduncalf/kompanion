@@ -3,11 +3,10 @@
  * allow us to have a synchronised read-only copy of an app's state in JS
  */
 
-export const USE_MOBX = true;
-
-import { assert } from "console";
 import { action, makeObservable, observable } from "mobx";
 import { InputStream, JuceVariant } from "./InputStream";
+
+export const USE_MOBX = true;
 
 export class ValueTree {
   constructor(
@@ -52,7 +51,7 @@ export class ValueTree {
     const numProps = input.readCompressedInt();
 
     if (numProps < 0) {
-      assert(false, "Data is corrupted");
+      console.assert(false, "Data is corrupted");
       return tree;
     }
 
@@ -62,7 +61,7 @@ export class ValueTree {
       if (name !== "") {
         tree.properties.set(name, input.readVar());
       } else {
-        assert(false, "Data is corrupted");
+        console.assert(false, "Data is corrupted");
       }
     }
 

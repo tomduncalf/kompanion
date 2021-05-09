@@ -4,7 +4,6 @@
  * is read-only, i.e. it can only receive updates, not send them.
  */
 
-import { assert } from "console";
 import { runInAction } from "mobx";
 import { InputStream } from "./InputStream";
 import { USE_MOBX, ValueTree } from "./ValueTree";
@@ -79,7 +78,7 @@ export const applyChange = (valueTree: ValueTree, input: string): boolean => {
         return true;
       }
 
-      assert(
+      console.assert(
         false,
         "Invalid child index - data corrupt or trees are out of sync"
       );
@@ -104,7 +103,7 @@ export const applyChange = (valueTree: ValueTree, input: string): boolean => {
         return true;
       }
 
-      assert(
+      console.assert(
         false,
         "Invalid child index - data corrupt or trees are out of sync"
       );
@@ -112,7 +111,7 @@ export const applyChange = (valueTree: ValueTree, input: string): boolean => {
     }
 
     default:
-      assert(false, "Invalid operation received - data corrupt");
+      console.assert(false, "Invalid operation received - data corrupt");
       break;
   }
 
