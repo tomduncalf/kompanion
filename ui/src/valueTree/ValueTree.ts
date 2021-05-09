@@ -9,13 +9,25 @@ import { InputStream, JuceVariant } from "./InputStream";
 export class ValueTree {
   constructor(
     public type: string = "",
-    public properties: Record<string, JuceVariant> = {},
+    public properties: Map<string, JuceVariant> = new Map(),
     public children: ValueTree[] = [],
     public parent: ValueTree | undefined = undefined
   ) {}
 
   isValid = (): boolean => {
     return this.type !== "";
+  };
+
+  readFromStream = (input: InputStream) => {
+    const newTree = ValueTree.readFromStream(input);
+    this.replaceWithValueTree(newTree);
+  };
+
+  replaceWithValueTree = (tree: ValueTree) => {
+    this.type = tree.type;
+    this.properties = tree.properties;
+    this.children = tree.children;
+    this.parent = tree.parent;
   };
 
   static readFromStream(input: InputStream) {
@@ -35,7 +47,7 @@ export class ValueTree {
       const name = input.readString();
 
       if (name !== "") {
-        tree.properties[name] = input.readVar();
+        tree.properties.set(name, input.readVar());
       } else {
         assert(false, "Data is corrupted");
       }
