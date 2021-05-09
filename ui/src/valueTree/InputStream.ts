@@ -1,8 +1,15 @@
+/**
+ * A Typescript implementation of the relevant parts of JUCE's InputStream class,
+ * to allow us to parse data out of the encoded ValueTree changes
+ */
+
 import { assert } from "console";
 
-if (typeof window === "undefined") {
-  const { TextDecoder } = require("util");
-}
+// For jest
+const TextDecoderImpl =
+  typeof TextDecoder !== "undefined"
+    ? TextDecoder
+    : require("util").TextDecoder;
 
 enum VariantStreamMarkers {
   varMarker_Int = 1,
@@ -16,7 +23,7 @@ enum VariantStreamMarkers {
   varMarker_Undefined = 9,
 }
 
-type JuceVariant =
+export type JuceVariant =
   | number
   | BigInt
   | string
@@ -100,7 +107,7 @@ export class InputStream {
       case VariantStreamMarkers.varMarker_Int:
         return this.readInt();
       case VariantStreamMarkers.varMarker_Int64:
-        throw new Error("Not implemented");
+        return this.readInt64();
       case VariantStreamMarkers.varMarker_BoolTrue:
         return true;
       case VariantStreamMarkers.varMarker_BoolFalse:
@@ -108,7 +115,9 @@ export class InputStream {
       case VariantStreamMarkers.varMarker_Double:
         return this.readDouble();
       case VariantStreamMarkers.varMarker_String:
-        return new TextDecoder().decode(this.read(numBytes));
+        const string = new TextDecoderImpl().decode(this.read(numBytes - 2));
+        this.incrementReadPosition(1); // skip over the 0 byte end marker
+        return string;
       case VariantStreamMarkers.varMarker_Binary:
         throw new Error("Not implemented");
       case VariantStreamMarkers.varMarker_Array:
@@ -124,11 +133,6 @@ export class InputStream {
   private makeInt32 = (bytes: number[] | Uint8Array): number => {
     // from ByteOrder::makeInt
     return bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24);
-  };
-
-  // from https://stackoverflow.com/questions/33137519/how-to-left-shift-numbers-greater-than-32-bits
-  shift = (number: number, shift: number) => {
-    return number * Math.pow(2, shift);
   };
 
   private makeInt64 = (bytes: Uint8Array): BigInt => {
