@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    Digitone.cpp
-    Created: 2 May 2021 6:27:03pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
-
 #include "Digitone.h"
 
 namespace Kompanion
@@ -18,5 +8,5 @@ namespace Device
     {
         return std::make_unique<Sysex::Digitone::Kit> (message);
     }
-} // namespace Device
-} // namespace Kompanion
+}// namespace Device
+}// namespace Kompanion

@@ -1,11 +1,6 @@
-/*
-  ==============================================================================
-
-    BehaviourBase.h
-    Created: 8 May 2021 3:53:28pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
+/**
+ Base class for a Behaviour. A Behaviour adds specific functionality to a Device, usually by
+ adding listeners to it in the enable() method, and removing those listeners in disable().
 */
 
 #pragma once
@@ -31,5 +26,5 @@ namespace Behaviour
 
         Device::Device& device;
     };
-} // namespace Behaviour
-} // namespace Kompanion
+}// namespace Behaviour
+}// namespace Kompanion

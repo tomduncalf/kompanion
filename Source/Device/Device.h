@@ -1,12 +1,9 @@
-/*
-  ==============================================================================
-
-    Device.h
-    Created: 2 May 2021 6:27:25pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
+/**
+ Base class for a Device. A Device represents a piece of Elektron hardware,
+ and is the main class we interact with for listening to and sending messages.
+ Each specific device implements its own subclass of Device with some
+ specific config information.
+ */
 
 #pragma once
 
@@ -38,7 +35,7 @@ namespace Device
         std::unique_ptr<juce::MidiInput> midiInput;
         std::unique_ptr<juce::MidiOutput> midiOutput;
 
-        template <typename T>
+        template<typename T>
         void addCallback (T callback, std::vector<T>& callbackList)
         {
             callbackList.push_back (callback);
@@ -58,7 +55,7 @@ namespace Device
 
         void handleIncomingMidiMessage (juce::MidiInput* source, const juce::MidiMessage& message);
 
-        template <typename T, typename... Args>
+        template<typename T, typename... Args>
         void callCallbacks (std::vector<T>& callbacks, Args... args)
         {
             for (auto callback = callbacks.begin(); callback < callbacks.end(); ++callback)
@@ -71,5 +68,5 @@ namespace Device
         }
     };
 
-} // namespace Device
-} // namespace Kompanion
+}// namespace Device
+}// namespace Kompanion

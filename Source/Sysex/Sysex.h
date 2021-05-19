@@ -1,12 +1,6 @@
-/*
-  ==============================================================================
-
-    Sysex.h
-    Created: 2 May 2021 6:07:57pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
+/**
+ Represents a SysEx message
+ */
 
 #pragma once
 
@@ -30,5 +24,5 @@ namespace Sysex
         void injectChecksum();
     };
 
-} // namespace Sysex
-} // namespace Kompanion
+}// namespace Sysex
+}// namespace Kompanion

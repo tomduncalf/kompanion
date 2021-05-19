@@ -1,12 +1,6 @@
-/*
-  ==============================================================================
-
-    DigiBase.h
-    Created: 2 May 2021 6:26:58pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
+/**
+ Base class for Digitone/Digitakt devices
+ */
 
 #pragma once
 
@@ -20,9 +14,9 @@ namespace Device
     {
     protected:
         DigiBase (juce::String defaultMidiDeviceName,
-                  uint8_t deviceSysexId) : Device (defaultMidiDeviceName,
-                                                   deviceSysexId) {};
+                  uint8_t deviceSysexId): Device (defaultMidiDeviceName,
+                                                  deviceSysexId) {};
     };
 
-} // namespace Device
-} // namespace Kompanion
+}// namespace Device
+}// namespace Kompanion

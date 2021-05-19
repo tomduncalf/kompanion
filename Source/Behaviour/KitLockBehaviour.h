@@ -1,13 +1,10 @@
-/*
-  ==============================================================================
-
-    KitLockBehaviour.h
-    Created: 8 May 2021 3:53:47pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
-
+/**
+ KitLockBehaviour implements a Behaviour which keeps the current kit
+ of sounds locked as the user changes patterns, to emulate the Kit functionality
+ found on larger Elektron devices. It does this by listening for pattern
+ change messages, and when the user changes pattern, it grabs the
+ preivous pattern's kit and sends it to the current pattern.
+ */
 #pragma once
 
 #include "BehaviourBase.h"
@@ -24,5 +21,5 @@ namespace Behaviour
         void enable() override;
         void disable() override;
     };
-} // namespace Behaviour
-} // namespace Kompanion
+}// namespace Behaviour
+}// namespace Kompanion

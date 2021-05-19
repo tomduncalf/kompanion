@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    Device.cpp
-    Created: 2 May 2021 6:27:25pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
-
 #include "Device.h"
 
 #include "../Sysex/Request.h"
@@ -17,8 +7,8 @@ namespace Kompanion
 namespace Device
 {
     Device::Device (juce::String defaultMidiDeviceName,
-                    uint8_t deviceSysexId) : defaultMidiDeviceName (defaultMidiDeviceName),
-                                             deviceSysexId (deviceSysexId)
+                    uint8_t deviceSysexId): defaultMidiDeviceName (defaultMidiDeviceName),
+                                            deviceSysexId (deviceSysexId)
     {
         initialiseDefaultMidiDevices();
 
@@ -39,7 +29,7 @@ namespace Device
     {
         juce::MidiDeviceInfo inputInfo;
 
-        for (auto& info : juce::MidiInput::getAvailableDevices())
+        for (auto& info: juce::MidiInput::getAvailableDevices())
         {
             if (info.name == defaultMidiDeviceName)
                 inputInfo = info;
@@ -51,7 +41,7 @@ namespace Device
 
         juce::MidiDeviceInfo outputInfo;
 
-        for (auto& info : juce::MidiOutput::getAvailableDevices())
+        for (auto& info: juce::MidiOutput::getAvailableDevices())
         {
             if (info.name == defaultMidiDeviceName)
                 outputInfo = info;
@@ -109,5 +99,5 @@ namespace Device
         }
     }
 
-} // namespace Device
-} // namespace Kompanion
+}// namespace Device
+}// namespace Kompanion

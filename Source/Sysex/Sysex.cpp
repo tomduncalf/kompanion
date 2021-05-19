@@ -1,20 +1,10 @@
-/*
-  ==============================================================================
-
-    Sysex.cpp
-    Created: 2 May 2021 6:07:57pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
-
 #include "Sysex.h"
 
 namespace Kompanion
 {
 namespace Sysex
 {
-    Sysex::Sysex (juce::MemoryBlock message) : message (message) {}
+    Sysex::Sysex (juce::MemoryBlock message): message (message) {}
 
     juce::MidiMessage Sysex::getMessage()
     {
@@ -33,11 +23,11 @@ namespace Sysex
         // JUCE doesn't include f0/f7 in the message so we -8 instead
         auto messageSize = message.getSize() - 8;
 
-        int messageLengthByte1 = (messageSize & 0b11111110000000) >> 7; // bits 7-13
-        int messageLengthByte2 = (messageSize & 0b1111111); // bits 0-6
+        int messageLengthByte1 = (messageSize & 0b11111110000000) >> 7;// bits 7-13
+        int messageLengthByte2 = (messageSize & 0b1111111);// bits 0-6
 
         int currentByte = -1;
-        for (auto byte : message)
+        for (auto byte: message)
         {
             currentByte++;
 
@@ -49,8 +39,8 @@ namespace Sysex
             total += byte;
         }
 
-        auto checksumByte1 = (total & 0b11111110000000) >> 7; // bits 7-13
-        auto checksumByte2 = (total & 0b1111111); // bits 0-6
+        auto checksumByte1 = (total & 0b11111110000000) >> 7;// bits 7-13
+        auto checksumByte2 = (total & 0b1111111);// bits 0-6
 
         size_t start = message.getSize() - 4;
         message.setBitRange (start * 8, 8, checksumByte1);
@@ -59,5 +49,5 @@ namespace Sysex
         message.setBitRange ((start + 3) * 8, 8, messageLengthByte2);
     }
 
-} // namespace Sysex
-} // namespace Kompanion
+}// namespace Sysex
+}// namespace Kompanion

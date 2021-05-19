@@ -1,12 +1,6 @@
-/*
-  ==============================================================================
-
-    Kit.h
-    Created: 2 May 2021 6:13:08pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
+/**
+ Represents a Digitone kit
+ */
 
 #pragma once
 
@@ -21,12 +15,12 @@ namespace Sysex
         class Kit : public KitBase
         {
         public:
-            Kit (juce::MemoryBlock message) : KitBase (message) {};
+            Kit (juce::MemoryBlock message): KitBase (message) {};
 
             void injectMidiControls() override;
             void setTargetKit (int targetKit) override;
         };
 
-    } // namespace Digitone
-} // namespace Sysex
-} // namespace Kompanion
+    }// namespace Digitone
+}// namespace Sysex
+}// namespace Kompanion

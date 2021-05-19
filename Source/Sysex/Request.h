@@ -1,12 +1,8 @@
-/*
-  ==============================================================================
-
-    Request.h
-    Created: 3 May 2021 4:13:39pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
+/**
+ Request represents a Sysex request to an Elektron device.
+ These requests all follow a common structure, with a few bytes
+ changing based on the device and feature we are using.
+ */
 
 #pragma once
 
@@ -28,5 +24,5 @@ namespace Sysex
         uint8_t type;
         uint8_t index;
     };
-} // namespace Sysex
-} // namespace Kompanion
+}// namespace Sysex
+}// namespace Kompanion

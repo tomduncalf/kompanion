@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    Kit.cpp
-    Created: 2 May 2021 6:13:08pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
-
 #include "Kit.h"
 
 namespace Kompanion
@@ -18,7 +8,7 @@ namespace Sysex
     {
         void Kit::injectMidiControls()
         {
-            // This sets MIDI T4 to output CC on channel 1
+            // This sets MIDI T4 to output CC on channel 1 - discovered by diffing kits
             int start = 2321;
             message.setBitRange (start * 8, 8, 0x20);
             message.setBitRange ((start + 1) * 8, 8, 0x00);
@@ -31,6 +21,6 @@ namespace Sysex
             message.setBitRange (8 * 8, 8, targetKit);
         }
 
-    } // namespace Digitone
-} // namespace Sysex
-} // namespace Kompanion
+    }// namespace Digitone
+}// namespace Sysex
+}// namespace Kompanion

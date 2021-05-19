@@ -1,13 +1,7 @@
-/*
-  ==============================================================================
-
-    Kit.h
-    Created: 2 May 2021 6:13:08pm
-    Author:  Tom Duncalf
-
-  ==============================================================================
-*/
-
+/**
+ Base class representing a Kit Sysex message. Each device
+ may have its own specialisation of this class.
+ */
 #pragma once
 
 #include "Sysex.h"
@@ -25,8 +19,8 @@ namespace Sysex
         virtual void setTargetKit (int targetKit) = 0;
 
     protected:
-        KitBase (juce::MemoryBlock message) : Sysex (message) {};
+        KitBase (juce::MemoryBlock message): Sysex (message) {};
     };
 
-} // namespace Sysex
-} // namespace Kompanion
+}// namespace Sysex
+}// namespace Kompanion
